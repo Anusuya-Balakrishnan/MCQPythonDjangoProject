@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500&display=swap');
+
+
+$plain-background:#f0f0f0;
+$background-color:radial-gradient(#2190F5,#0A489C);
+$button-color:#2D81F7;
+$form-background:#e9f0fa;
+$form-text-color:rgb(126, 126, 126);
+$answeredButton:#4ACD08;
+$notVisitedButton:#FFFFFF;
+$notAnsweredButton:#EC4E04;
+*{
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins";
+}
+
+@mixin flexContent($justify:center,$align:center) {
+    display: flex;
+    align-items: $align;
+    justify-content: $justify; 
+}

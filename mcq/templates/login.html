@@ -1,0 +1,26 @@
+{% extends 'base.html'%}
+<!-- load static -->
+{% load static %}
+<!-- block content -->
+{% block content %}
+<section>
+  <div class="home-page">
+    <div class="home-page__logo">
+      <img src="{% static 'image/oceanacademyLogoWhite.svg' %}" alt="" />
+    </div>
+    <div class="home-page__signin-box">
+      <form method="POST">
+        {% csrf_token %}
+        <div class="home-page__sigin-box-title">SIGN IN</div>
+        <input
+          type="telephone"
+          placeholder="Enter mobile number"
+          name="mobilenumber"
+        /><br />
+        <div class="sigin-box__button"><button>Sign in</button></div>
+      </form>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends 'base.html'%}
+<!-- load static -->
+{% load static %}
+<!-- block content -->
+{% block content %}
+<section class="question-page">
+  <div class="question-page__title">Syntax, Variable and Data types Test</div>
+  <div class="question-page__body">
+    <div class="question-page-content">
+      <form method="POST" id="questionForm">
+        {% csrf_token %}
+        <!-- variable -->
+        {{ questionList|json_script:'name' }}
+        <span class="questionNumber"></span>
+        <span class="question-page-content__questions"></span>
+        <div class="question-page-content__optionParent">
+          <div class="question-page-content__options">
+            <input type="radio" name="option" class="option" />
+            <p></p>
+          </div>
+          <div class="question-page-content__options">
+            <input type="radio" name="option" class="option" />
+            <p></p>
+          </div>
+
+          <div class="question-page-content__options">
+            <input type="radio" name="option" class="option" />
+            <p></p>
+          </div>
+          <div class="question-page-content__options">
+            <input type="radio" name="option" class="option" />
+            <p></p>
+          </div>
+        </div>
+        <input type="hidden" class="correctAnswer" />
+        <button
+          type="button"
+          class="question-page-content__submit"
+          name="submit"
+        >
+          next
+        </button>
+      </form>
+    </div>
+    <div class="question-page__question-list">
+      <div class="question-page__each-question__time">
+        <p>Time</p>
+        <div class="exact-time">00 mins:58 sec</div>
+      </div>
+      <div class="question-page__each-questionNo-parent">
+        <p>Question Palatte:</p>
+        <div class="question-page__each-question__no">
+          <button class="button button-1">1</button>
+          <button class="button button-2">2</button>
+          <button class="button button-3">3</button>
+          <button class="button button-4">4</button>
+          <button class="button button-5">5</button>
+          <button class="button button-6">6</button>
+          <button class="button button-7">7</button>
+          <button class="button button-8">8</button>
+          <button class="button button-9">9</button>
+          <button class="button button-10">10</button>
+          <button class="button button-11">11</button>
+          <button class="button button-12">12</button>
+          <button class="button button-13">13</button>
+          <button class="button button-14">14</button>
+          <button class="button button-15">15</button>
+        </div>
+      </div>
+      <div class="question-page__instruction">
+        <div class="question-page__instruction1">
+          <button></button>
+          <p>Answered</p>
+        </div>
+        <div class="question-page__instruction2">
+          <button></button>
+          <p>Not Visited</p>
+        </div>
+        <div class="question-page__instruction3">
+          <button></button>
+          <p>Not Answered</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  var questionList = JSON.parse(document.getElementById("name").textContent);
+  var questionNumber = document.querySelector(".questionNumber");
+  var currentQuestionNumber = 0;
+  var questionsContainer = document.getElementsByClassName(
+    "question-page-content__questions"
+  )[0];
+  var optionContainer = document.querySelectorAll(
+    ".question-page-content__options p"
+  );
+  var optionValue = document.querySelectorAll(
+    ".question-page-content__options .option"
+  );
+  var correctAnswer = document.querySelector(".correctAnswer");
+  var submitButton = document.querySelector(".question-page-content__submit");
+  var resultDetails = [];
+  // console.log(questionList);
+  function questionRender(eachQuestion) {
+    if (currentQuestionNumber < questionList.length) {
+      questionsContainer.innerHTML = eachQuestion.question;
+
+      questionNumber.innerHTML = currentQuestionNumber + 1;
+      correctAnswer.value = eachQuestion.answer;
+      for (let i = 0; i <= 3; i++) {
+        optionContainer[i].innerHTML = eachQuestion[`option${i + 1}`];
+        optionValue[i].value = eachQuestion[`option${i + 1}`];
+        var value = eachQuestion[`option${i + 1}`];
+      }
+      var option = document.getElementsByName("option");
+      for (let i = 0; i < option.length; i++) {
+        option[i].checked = false;
+      }
+    } else {
+      currentQuestionNumber = 0;
+      resultDetails = [];
+      submitButton.href = "{% url 'resultPage'%}";
+    }
+
+    if (currentQuestionNumber < questionList.length - 1) {
+      submitButton.innerHTML = "next";
+    } else if (currentQuestionNumber == questionList.length - 1) {
+      submitButton.innerHTML = "submit";
+    }
+    // document.getElementById("questionForm").reset();
+  }
+
+  // first rendering of question details list page
+
+  questionRender(questionList[currentQuestionNumber]);
+
+  // on click next button
+
+  submitButton.addEventListener("click", () => {
+    var question = document.getElementsByClassName(
+      "question-page-content__questions"
+    )[0].innerHTML;
+
+    var option = document.getElementsByName("option");
+    for (let i = 0; i < option.length; i++) {
+      if (option[i].checked) {
+        var selectedOption = option[i].value;
+      }
+    }
+    var correctAnswer =
+      document.getElementsByClassName("correctAnswer")[0].value;
+
+    // creating object for currect question ,selected option and answer
+
+    currentQuestionDetails = {
+      question: question,
+      selectedOption: selectedOption,
+      correctAnswer: correctAnswer,
+    };
+    resultDetails.push(currentQuestionDetails);
+    console.log(resultDetails);
+    currentQuestionNumber++;
+    questionRender(questionList[currentQuestionNumber]);
+  });
+</script>
+{% endblock %}

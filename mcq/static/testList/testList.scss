@@ -1,0 +1,88 @@
+
+
+@use "../variables" as *;
+
+
+.mcqTestList__Title{
+    width: 100%;
+    text-align: center;
+    // background-color: aquamarine;
+    font-size: 30px;
+    color: $button-color;
+}
+.MCQTest__Box-parent{
+    display: flex;
+    // justify-content: space-evenly;
+    flex-wrap: wrap;
+    a{
+        text-decoration: none;
+        color: white;
+        .MCQTest__Box{
+            background-image: $background-color;
+            width: 350px;
+            transition: 0.5s;
+            // height: 200px;
+            margin: 40px 45px;
+            border-radius: 5px;
+            color: white;
+            font-family: "Poppines";
+            padding: 15px;
+            .MCQTest__Box-title{
+                display: flex;
+                
+                .MCQTest__Box-title__image{
+                    width: 70px;
+                    height: 70px;
+                    background-color: rgba(255, 255, 255, 0.439);
+                    border-radius: 50%;
+                    @include flexContent;    
+                    img{
+                        width: 80%;
+                        height: 80%;
+                    }
+                }
+                p{
+                  font-size: 20px;
+                  padding: 20px;  
+                }
+            }
+            .MCQTest__Box-content{
+                p{
+                    font-size: 15px;
+                    margin: 20px;
+                    img{
+                        float: left;
+                        width: 20px;
+                        height: 20px;
+                        margin-right:10px;
+                        // margin-top: 3px;
+                    }
+                }
+            }
+            &:hover{
+                box-shadow: white;
+                transform: scale(1.05);
+            }
+        }
+    }
+    
+}
+
+@media (max-width:450px) {
+    .MCQTest__Box{
+        width: auto;
+        .MCQTest__Box-title{
+            flex-direction: column;
+            @include flexContent;
+           p{
+            font-size: 120%;
+           }
+        }
+        .MCQTest__Box-content{
+            
+            p{
+                font-size: 75%;
+            }
+        }
+    }
+}

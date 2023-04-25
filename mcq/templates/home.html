@@ -1,0 +1,21 @@
+{% extends 'base.html'%}
+<!-- load static -->
+{% load static %}
+<!-- block content -->
+{% block content %}
+
+<div class="MCQListPage__body">
+  {{ t | json_script:"t-data" }}
+  <div class="MCQListPage__title">MCQ'S List</div>
+  <div class="MCQ-lists">
+    {% load static %}
+    <!-- for loop -->
+    {% for i in questionsType %}
+    <div class="MCQ-list__Each-test">
+      <a href="{% url 'testList' %}">{{i}} MCQ's</a>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

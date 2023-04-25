@@ -1,0 +1,51 @@
+@use "../variables" as *;
+
+.test-content__parent{
+    // background-color: $plain-background;
+    background-color: white;
+    width: 100%;
+    height: auto;
+    // height: 100vh;
+    .test-content__heading{
+        @include flexContent;
+        flex-direction: column;
+        color:$button-color;
+        .test-content__title{
+            padding: 0 ;
+            padding-bottom: 20px;
+            font-size: 35px;
+            
+        }
+        .test-content{
+            font-size: 25px;
+        }
+    }
+
+
+.test-content-lists{
+    margin-top: 50px;
+  padding: 0 200px;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+    // flex-direction: column;
+    // background-color: aquamarine;
+.test-content__listElement{
+    width: 400px;
+    padding: 10px;
+    margin: 20px;
+    border-radius: 10px;
+    border: 2px solid $button-color;
+    cursor: pointer;
+    text-decoration: none;
+    color: $button-color;
+    &:hover{
+        background-color: $button-color;
+        color:white;
+    }
+}
+}
+
+}
+
+

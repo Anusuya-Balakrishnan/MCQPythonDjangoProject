@@ -1,0 +1,92 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins";
+}
+
+.question-page {
+  display: flex;
+  flex-direction: column;
+}
+.question-page .question-page__title {
+  text-align: center;
+  color: #2D81F7;
+  font-size: 22px;
+  margin: 30px;
+}
+.question-page .question-page__body {
+  display: flex;
+  justify-content: space-around;
+}
+.question-page .question-page__body .question-page-content {
+  margin: 30px;
+  padding: 30px 70px;
+}
+.question-page .question-page__body .question-page-content .question-page-content__optionParent {
+  margin: 50px 30px;
+}
+.question-page .question-page__body .question-page-content .question-page-content__optionParent .question-page-content__options {
+  padding: 20px;
+}
+.question-page .question-page__body .question-page-content .question-page-content__optionParent .question-page-content__options input[type=radio] {
+  background-color: #2D81F7;
+}
+.question-page .question-page__body .question-page-content .question-page-content__optionParent .question-page-content__options p {
+  display: inline-block;
+  padding-left: 20px;
+}
+.question-page .question-page__body .question-page-content .question-page-content__submit {
+  padding: 10px 30px;
+  border: 0;
+  background-color: #2D81F7;
+  border-radius: 5px;
+  font-size: 18px;
+  color: white;
+}
+.question-page .question-page__body .question-page__question-list {
+  padding: 30px;
+  width: 400px;
+  border-radius: 10px;
+  background-color: #dbdbdb;
+}
+.question-page .question-page__body .question-page__question-list .question-page__each-question__time .exact-time {
+  margin: 20px;
+}
+.question-page .question-page__body .question-page__question-list .question-page__each-questionNo-parent .question-page__each-question__no {
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+.question-page .question-page__body .question-page__question-list .question-page__each-questionNo-parent .question-page__each-question__no .button {
+  width: 50px;
+  height: 50px;
+  margin: 12px;
+  border: 0;
+  transition: 0.3s;
+  background-color: white;
+  cursor: pointer;
+}
+.question-page .question-page__body .question-page__question-list .question-page__each-questionNo-parent .question-page__each-question__no .button:hover {
+  transform: scale(1.1);
+}
+.question-page .question-page__body .question-page__question-list .question-page__instruction .question-page__instruction1, .question-page .question-page__body .question-page__question-list .question-page__instruction .question-page__instruction3, .question-page .question-page__body .question-page__question-list .question-page__instruction .question-page__instruction2 {
+  display: flex;
+  margin: 20px;
+}
+.question-page .question-page__body .question-page__question-list .question-page__instruction .question-page__instruction1 button, .question-page .question-page__body .question-page__question-list .question-page__instruction .question-page__instruction3 button, .question-page .question-page__body .question-page__question-list .question-page__instruction .question-page__instruction2 button {
+  width: 50px;
+  height: 50px;
+  margin-right: 20px;
+  border: 0;
+  background-color: #4ACD08;
+}
+.question-page .question-page__body .question-page__question-list .question-page__instruction .question-page__instruction1 p, .question-page .question-page__body .question-page__question-list .question-page__instruction .question-page__instruction3 p, .question-page .question-page__body .question-page__question-list .question-page__instruction .question-page__instruction2 p {
+  padding: 20px;
+}
+.question-page .question-page__body .question-page__question-list .question-page__instruction .question-page__instruction2 button {
+  background-color: #FFFFFF;
+}
+.question-page .question-page__body .question-page__question-list .question-page__instruction .question-page__instruction3 button {
+  background-color: #EC4E04;
+}/*# sourceMappingURL=questionPage.css.map */

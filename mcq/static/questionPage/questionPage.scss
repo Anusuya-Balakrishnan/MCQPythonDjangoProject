@@ -1,0 +1,110 @@
+@use "../variables" as *;
+
+.question-page{
+    display: flex;
+    flex-direction: column;
+    .question-page__title{
+        text-align: center;
+        color: $button-color;
+        font-size: 22px;
+        // padding: 30px;
+        // background-color: aquamarine;
+        margin: 30px;
+    }
+    .question-page__body{
+        display: flex;
+        justify-content: space-around;
+        .question-page-content{
+            margin: 30px;
+            // background-color: aqua;
+            padding: 30px 70px;
+            .question-page-content__optionParent{
+                margin: 50px 30px;
+                .question-page-content__options{
+                    padding: 20px;
+                    
+                    input[type="radio"]{
+                        // border: 1px solid $button-color;
+                        background-color: $button-color;
+                    }
+                    p{
+                        display: inline-block;
+                        padding-left: 20px;
+                    }
+                }
+            }
+            
+            .question-page-content__submit{
+                padding: 10px 30px;
+                border: 0;
+                background-color: $button-color;
+                border-radius: 5px;
+                font-size: 18px;
+                color: white;
+            }
+        }
+        .question-page__question-list{
+            padding: 30px;
+            width: 400px;
+            border-radius: 10px;
+            background-color: #dbdbdb;
+            .question-page__each-question__time{
+                .exact-time{
+                    margin: 20px;
+                }
+            }
+            .question-page__each-questionNo-parent{
+                
+                .question-page__each-question__no{
+                    margin:20px 0 ;
+                    display: flex;
+                    flex-wrap: wrap;
+                    .button{
+                        // padding: 20px;
+                        width: 50px;
+                        height: 50px;
+                        margin: 12px;
+                        border: 0;
+                        transition: 0.3s;
+                        background-color: white;
+                        cursor: pointer;
+                        &:hover{
+                            transform: scale(1.1);
+                        }
+                    }
+                }
+            }
+            .question-page__instruction{
+                .question-page__instruction1{
+                    display: flex;
+                    margin: 20px;
+                    button{
+                        width: 50px;
+                        height: 50px;
+                        margin-right: 20px;
+                        border: 0;
+                        background-color: $answeredButton;
+                    }
+                    p{
+                        padding: 20px;
+                    }
+                }
+                .question-page__instruction2{
+                    button{
+                        background-color:$notVisitedButton;
+                    }
+                    @extend .question-page__instruction1
+                    
+                }
+                .question-page__instruction3{
+                    button{
+                        background-color:$notAnsweredButton;
+                    }
+                    @extend .question-page__instruction1
+                }
+            }
+           
+        }
+    }
+   
+}

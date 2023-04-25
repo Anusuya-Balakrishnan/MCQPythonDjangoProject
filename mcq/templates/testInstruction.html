@@ -1,0 +1,27 @@
+{% extends 'base.html'%}
+<!-- load static -->
+{% load static %}
+<!-- block content -->
+{% block content %}
+<div class="instruction-page">
+  <div class="instruction-page__content">
+    <div class="instruction-page__title">{{topic}}:</div>
+    <div class="instruction-page__content_details">
+      <p>Test Instructions</p>
+      <ul>
+        <li>Total Number of Questions: {{noQuestions}}</li>
+        <li>Each Questions carries 1 mark</li>
+        <li>Time Alloted: {{time}} minutes</li>
+      </ul>
+      <button><a href="{%url 'questionPage' %}">Start Test</a></button>
+    </div>
+  </div>
+  <div class="instruction-page_image">
+    <img src="{% static 'image/testInstruction.svg' %}" alt="" />
+  </div>
+</div>
+<script>
+  sessionStorage.setItem("questionList", JSON.stringify({ questionList }));
+  console.log(JSON.parse(sessionStorage.getItem("questionList")), "session ");
+</script>
+{% endblock %}

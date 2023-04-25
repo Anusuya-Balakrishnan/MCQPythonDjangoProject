@@ -1,0 +1,65 @@
+<html lang="en">
+  <head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="{% static 'home/home.css' %}" />
+    <link rel="stylesheet" href="{% static 'login/login.css' %}" />
+    <link rel="stylesheet" href="{% static 'signup/signup.css'%}" />
+    <link rel="stylesheet" href="{% static 'testList/testList.css' %}" />
+    <link rel="stylesheet" href="{% static 'testContent/testContent.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'questionPage/questionPage.css' %}"
+    />
+    <link
+      rel="stylesheet"
+      href="{% static 'testInstruction/testInstruction.css' %}"
+    />
+    <title>MCQ Project</title>
+    <!-- <script src="{% static 'questionPage/questionPage.js' %}"></script> -->
+  </head>
+  <body>
+    <section class="MCQListPage">
+      {% if userProfile == 1 %}
+      <div class="MCQ-Navbar">
+        <div class="MCQ-logo">
+          <img src="{% static 'image/oceanacademy Logo.svg '%}" alt="" />
+        </div>
+        <div class="MCQ-sidebar">
+          <div class="MCQ-userProfile-side">
+            <div class="MCQ-userProfile">
+              <p>{{userName}}</p>
+              <div class="MCQ-userProfile__image">
+                <img src="{% static 'image/dhoni.jpg'%}" alt="userImage" />
+              </div>
+            </div>
+            <div class="MCQ-userProfile__options">
+              <div class="editOption">
+                <a href="{% url 'signup'%}"> Edit Profile </a>
+              </div>
+              <div class="logoutOption">
+                <a href="{% url 'logout' %}">Logout</a>
+              </div>
+            </div>
+            <div class="MCQ-userProfile__leaderBoard">
+              <a href="">Leader Board</a>
+              <img src="{% static 'image/medal.svg'%}" alt="medal" />
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      <!-- // end if  -->
+    </section>
+    {% block content %}
+    <!-- block content -->
+    {% endblock %}
+
+    <!-- end block -->
+    <!-- <script src="{% static 'home/home.js' %}"></script> -->
+  </body>
+</html>
+<!--  -->

@@ -1,0 +1,28 @@
+{% extends 'base.html'%}
+<!-- load static -->
+{% load static %}
+<!-- block content -->
+{% block content %}
+<!-- for loop -->
+<div class="mcqTestList__Title">MCQ'S Test List</div>
+<div class="MCQTest__Box-parent">
+  {% for l in language %}
+  <a href="{% url 'testContent' lang=l %}">
+    <div class="MCQTest__Box">
+      <div class="MCQTest__Box-title">
+        <div class="MCQTest__Box-title__image">
+          <img src="{% static 'image/pythonLogo.svg'%}" alt="python logo" />
+        </div>
+
+        <p>{{l}} MCQs</p>
+      </div>
+      <div class="MCQTest__Box-content">
+        <p>Average Score: 4</p>
+        <p>No of Person Attended : 2502</p>
+        <p><img src="{% static 'image/light.svg'%}" alt="light" /> Beginner</p>
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% endblock %}

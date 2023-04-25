@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins";
+}
+
+.test-content__parent {
+  background-color: white;
+  width: 100%;
+  height: auto;
+}
+.test-content__parent .test-content__heading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  color: #2D81F7;
+}
+.test-content__parent .test-content__heading .test-content__title {
+  padding: 0;
+  padding-bottom: 20px;
+  font-size: 35px;
+}
+.test-content__parent .test-content__heading .test-content {
+  font-size: 25px;
+}
+.test-content__parent .test-content-lists {
+  margin-top: 50px;
+  padding: 0 200px;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+.test-content__parent .test-content-lists .test-content__listElement {
+  width: 400px;
+  padding: 10px;
+  margin: 20px;
+  border-radius: 10px;
+  border: 2px solid #2D81F7;
+  cursor: pointer;
+  text-decoration: none;
+  color: #2D81F7;
+}
+.test-content__parent .test-content-lists .test-content__listElement:hover {
+  background-color: #2D81F7;
+  color: white;
+}/*# sourceMappingURL=testContent.css.map */

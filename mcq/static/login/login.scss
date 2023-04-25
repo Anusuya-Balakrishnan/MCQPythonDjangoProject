@@ -1,0 +1,61 @@
+
+@use "../variables" as *;
+
+.home-page{
+ background-image: $background-color;
+ width: 100vw;
+ height: 100vh;
+ @include flexContent;
+ flex-direction: column;
+ flex-wrap: wrap;
+ 
+ .home-page__logo{
+    width: auto;
+    height: 150px;
+    padding: 10px;
+    
+ }
+ .home-page__signin-box{
+    width: 500px;
+    height: 380px;
+    background-color: $form-background;
+    border-radius: 10px;
+    padding: 20px;
+    margin:30px 0;
+    @include flexContent;
+ flex-direction: column;
+ .home-page__sigin-box-title{
+    font-size: 38px;
+    color: #535353;
+    text-align: center;
+ }
+ input[type="telephone"]{
+    border: 0;
+    padding: 15px;
+    border-radius: 2px;
+    margin:  40px 0 30px;
+    width: 330px;
+   
+     
+ }
+ input[type="telephone"]:focus{
+   outline: 1px $button-color solid ;
+}
+ .sigin-box__button{
+    width: 100%;
+    height: 45px;
+    margin-top: 20px;
+    // background-color: aquamarine;
+    @include flexContent;
+    button{
+        padding: 10px 50px;
+        font-size: larger;
+        background-color: $button-color;
+        border: 0;
+        color: white;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+ }
+ }
+}

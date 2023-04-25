@@ -1,0 +1,21 @@
+{% extends 'base.html'%}
+<!-- load static -->
+{% load static %}
+<!-- block content -->
+{% block content %}
+<div class="test-content__parent">
+  <div class="test-content__heading">
+    <div class="test-content__title">{{language}} MCQ'S</div>
+    <div class="test-content">Test content</div>
+  </div>
+  <div class="test-content-lists">
+    {% for content in contentList %}
+    <a
+      class="test-content__listElement"
+      href="{% url 'testInstruction' cont=content %}"
+      >{{content}}</a
+    >
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
