@@ -1,2 +1,24 @@
 {% extends 'base.html'%}
-<div>result page</div>
+<!-- load static -->
+{% load static %}
+<!-- block content -->
+{% block content %}
+<section class="resultPage">
+  <div class="result__title">Data types:</div>
+  <div class="resultPage__body">
+    <div class="resultPage__body_list">
+      <p>Test Instructions:</p>
+      <ul>
+        <li>No of Correct Answer:</li>
+        <li>No of Wrong Answer:</li>
+        <li>No of Questons Skipped:</li>
+      </ul>
+    </div>
+    <div class="resultPage__body_image">
+      <div class="resultPage_value">98%</div>
+      <div class="resultPage__body_circle"></div>
+    </div>
+  </div>
+  <script></script>
+</section>
+{% endblock %}

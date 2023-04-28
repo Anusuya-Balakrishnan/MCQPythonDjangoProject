@@ -136,4 +136,4 @@ def result(req):
     if(req.session.get("user") == None):
         return redirect('login')
 
-    return render(req, "resultPage.html", {"userName": userNameFunction(req.session["user"])})
+    return render(req, "resultPage.html", {"userName": userNameFunction(req.session["user"]), "userProfile": 1, })
