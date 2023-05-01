@@ -113,13 +113,16 @@ def testInstruction(req, cont):
     for eachQuestion in questionList:
         sumTime += int(eachQuestion["time"])
     print(sumTime)
+    print(questionList, "questionList")
     return render(req, "testInstruction.html", {"userName": userNameFunction(req.session["user"]),
                                                 "userProfile": 1, "topic": cont.title(),
-                                                "questionList": questionList, "noQuestions": len(questionList),
+                                                "questionList": questionList,
+                                                "currentQuestion": questionList[0],
+                                                "noQuestions": len(questionList),
                                                 "time": sumTime})
 
 
-def questions(req):
+def questions(req, questionNo=0):
     if(req.session.get("user") == None):
         return redirect('login')
     questionList = req.session.get("questionList")
@@ -128,7 +131,8 @@ def questions(req):
     # databaseConnection.resultCollection.insert_one()
 
     return render(req, "questionPage.html", {"userName": userNameFunction(req.session["user"]),
-                                             "userProfile": 1, "questionList": req.session.get("questionList")})
+                                             "userProfile": 1, "questionList": req.session.get("questionList"),
+                                             "noOfQuestions": len(req.session.get("questionList"))})
     # "questionList": questionList, 'noOfQuestions': len(questionList)
 
 
