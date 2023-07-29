@@ -2,8 +2,7 @@ from django.shortcuts import render, HttpResponse, redirect
 from . import databaseConnection
 from bson.objectid import ObjectId
 
-
-# login page
+# user name function
 
 
 def userNameFunction(id):
@@ -13,6 +12,7 @@ def userNameFunction(id):
     return userName
 
 
+# login page
 def login(req):
     if(req.session.get("user") == None):
         if req.method == "POST":
@@ -24,8 +24,10 @@ def login(req):
                     return redirect('home')
                 else:
                     isNewUser = True
+        # if user mobile number is not present in the database, move to signup page
             if(isNewUser):
                 return redirect('signup')
+
     else:
         return redirect('home')
 

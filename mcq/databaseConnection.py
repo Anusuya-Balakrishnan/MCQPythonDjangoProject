@@ -17,6 +17,7 @@ for data in questionsCollection.find():
     type = data["type"]
     questionsTypeList.append(type)
     questionsTypeSet = set(questionsTypeList)
+    # questionsTypeSet = ("Programming", "cyber security", "Testing")
     for i in languageSet:
         content = []
         for j in questionsCollection.find({"language": i}):
