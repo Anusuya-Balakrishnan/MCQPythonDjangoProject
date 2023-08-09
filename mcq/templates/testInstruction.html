@@ -5,6 +5,8 @@
 {% block content %}
 <div class="instruction-page">
   <div class="instruction-page__content">
+    <!-- <p>{{questionList}}</p> -->
+    {{ questionList | json_script:"questionList" }}
     <div class="instruction-page__title">{{topic}}:</div>
     <div class="instruction-page__content_details">
       <p>Test Instructions</p>
@@ -20,8 +22,14 @@
     <img src="{% static 'image/testInstruction.svg' %}" alt="" />
   </div>
 </div>
+
 <script>
-  sessionStorage.setItem("questionList", JSON.stringify({ questionList }));
-  console.log(JSON.parse(sessionStorage.getItem("questionList")), "session ");
+  console.log("Hello javascript");
+  sessionStorage.setItem("questionList", questionList);
+  // console.log(JSON.stringify(questionList));
+  const questionListString = JSON.parse(sessionStorage.getItem("questionList"));
+  console.log("string data", questionListString);
+  const questionObject = JSON.parse(questionListString);
+  console.log(questionObject.question, "session ");
 </script>
 {% endblock %}

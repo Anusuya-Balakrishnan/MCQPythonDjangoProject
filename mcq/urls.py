@@ -10,9 +10,9 @@ urlpatterns = [path('', views.login, name='login'),
                path('testList/', views.testList, name='testList'),
                path('testContent/<str:lang>',
                     views.testContent, name='testContent'),
-               path('testInstruction/<str:cont>', views.testInstruction,
+               path('testInstruction/<str:cont>/<str:languageName>', views.testInstruction,
                     name='testInstruction'),
                path('questions/', views.questions, name='questionPage'),
-               path('resultPage',views.result, name='resultPage')
+               path('resultPage', views.result, name='resultPage')
 
                ]

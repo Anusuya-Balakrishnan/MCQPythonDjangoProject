@@ -4,6 +4,8 @@ from bson.objectid import ObjectId
 
 # user name function
 
+# function which return full name of user
+
 
 def userNameFunction(id):
     user = databaseConnection.userCollection.find_one(
@@ -45,6 +47,7 @@ def signup(req):
         profileImage = req.POST.get("profileImage")
         newUser = {"firstName": firstName, "lastName": lastName, "emailId": emailId, "dateOfBirth": dateOfBirth,
                    "mobileNumber": mobileNumber, "profileImage": profileImage}
+        # inserting new user into database
         data = databaseConnection.userCollection.insert_one(newUser)
         print("new user inserted", data.inserted_id)
         if(bool(data.inserted_id)):
@@ -90,6 +93,7 @@ SelectedLanguage = ""
 def testContent(req, lang):
     languageKeys = databaseConnection.languageContent.keys()
     content = []
+    print("languageKeys", languageKeys)
     for key in languageKeys:
         if(lang == key and databaseConnection.languageContent[key] != ""):
             content = databaseConnection.languageContent[key]
@@ -105,11 +109,11 @@ def testContent(req, lang):
 questionList = []
 
 
-def testInstruction(req, cont):
+def testInstruction(req, cont, languageName):
     if(req.session.get("user") == None):
         return redirect('login')
     print("content=", cont, "\n")
-    questionList = databaseConnection.questionsList(cont)
+    questionList = databaseConnection.questionsList(cont, languageName)
     req.session["questionList"] = questionList
     sumTime = 0
     for eachQuestion in questionList:
@@ -119,7 +123,7 @@ def testInstruction(req, cont):
     return render(req, "testInstruction.html", {"userName": userNameFunction(req.session["user"]),
                                                 "userProfile": 1, "topic": cont.title(),
                                                 "questionList": questionList,
-                                                "currentQuestion": questionList[0],
+                                                # "currentQuestion": questionList[0],
                                                 "noQuestions": len(questionList),
                                                 "time": sumTime})
 

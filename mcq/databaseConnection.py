@@ -7,8 +7,12 @@ resultCollection = mcqdb["result"]
 
 questionsTypeSet = {}
 questionsTypeList = []
+
+# contains list of all languages
 languageList = []
 languageSet = {}
+# each language contents eg:
+# languageContent={"java":{"variable","datatypes","operator"},"python":{"variable","datatypes","operator"}}
 languageContent = {}
 for data in questionsCollection.find():
     language = data["language"]
@@ -26,10 +30,12 @@ for data in questionsCollection.find():
         languageContent[i] = set(content)
 
 
-def questionsList(topic):
+def questionsList(topic, language):
     questions = []
     eachQuestion = {}
-    for j in questionsCollection.find({"topic": topic}):
+    print("topic", topic, "\nlanguage", language)
+    for j in questionsCollection.find({'$and': [{"topic": topic}, {"language": language}]}):
+        print("jjjjjjjjjjjjjjjjjjjjjjjjj", j)
         eachQuestion = {}
         eachQuestion["question"] = j["questions"]
         eachQuestion['option1'] = j['option1']

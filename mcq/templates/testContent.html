@@ -12,7 +12,7 @@
     {% for content in contentList %}
     <a
       class="test-content__listElement"
-      href="{% url 'testInstruction' cont=content %}"
+      href="{% url 'testInstruction' cont=content languageName=language %}"
       >{{content}}</a
     >
     {% endfor %}
