@@ -4,17 +4,17 @@
 <!-- block content -->
 {% block content %}
 <section class="question-page">
-  <div class="question-page__title">Syntax, Variable and Data types Test</div>
+  <div class="question-page__title">{{topic}}</div>
   <div class="question-page__body">
     <div class="question-page-content">
       <form method="POST" id="questionForm">
         {% csrf_token %}
         <!-- variable -->
-        {{ questionList|json_script:'name' }}
+        <!-- {{ questionList|json_script:'name' }} -->
         <!--  -->
-        {{ noOfQuestions|json_script:'noOfQuestions' }}
+        <!-- {{ noOfQuestions|json_script:'noOfQuestions' }} -->
         <!--  -->
-        {{ currentQuestion|json_script:'currentQuestion' }}
+        <!-- {{ currentQuestion|json_script:'currentQuestion' }} -->
 
         <span class="questionNumber">{{ currentQuestion }}</span>
         <span class="question-page-content__questions"
@@ -65,12 +65,11 @@
           value="{{currentQuestion.answer}}"
         />
         <button
-          href="{% url 'resultPage' %}"
           type="button"
           class="question-page-content__submit"
           name="submit"
         >
-          next
+          <a href=""> next </a>
         </button>
       </form>
     </div>
@@ -82,9 +81,7 @@
       <div class="question-page__each-questionNo-parent">
         <p>Question Palatte:</p>
         <div class="question-page__each-question__no">
-          <!-- <button class="button button-1">1</button>
-          <button class="button button-2">2</button>
-           -->
+          <!-- questions button child list -->
         </div>
       </div>
       <div class="question-page__instruction">
@@ -104,18 +101,18 @@
     </div>
   </div>
 </section>
+
 <script>
-  var noOfQuestions = JSON.parse(
-    document.getElementById("noOfQuestions").textContent
-  );
-  var noOfQuestions = JSON.parse(
-    document.getElementById("noOfQuestions").textContent
-  );
+  // getting list of questions in sessionStorage
+  const questionListString = JSON.parse(sessionStorage.getItem("questionList"));
 
-  console.log(noOfQuestions);
-  var questionList = JSON.parse(document.getElementById("name").textContent);
+  const ListOfquestion = JSON.parse(questionListString);
+  console.log("ListOfquestion", ListOfquestion);
 
-  // started creating questions button:
+  // getting no of questions in Array
+  var noOfQuestions = ListOfquestion.length;
+
+  // started creating questions button (side option to select questions):
   var question_page_Parent = document.querySelector(
     ".question-page__each-question__no"
   );
@@ -127,82 +124,87 @@
   }
   // end creating questions button:
 
-  // var questionNumber = document.querySelector(".questionNumber");
-  // var currentQuestionNumber = 0;
-  // var questionsContainer = document.getElementsByClassName(
-  //   "question-page-content__questions"
-  // )[0];
-  // var optionContainer = document.querySelectorAll(
-  //   ".question-page-content__options p"
-  // );
-  // var optionValue = document.querySelectorAll(
-  //   ".question-page-content__options .option"
-  // );
-  // var correctAnswer = document.querySelector(".correctAnswer");
-  // var submitButton = document.querySelector(".question-page-content__submit");
-  // var resultDetails = [];
-  // // console.log(questionList);
+  var questionNumber = document.querySelector(".questionNumber");
+  var currentQuestionNumber = 0;
+  var questionsContainer = document.getElementsByClassName(
+    "question-page-content__questions"
+  )[0];
+  var optionContainer = document.querySelectorAll(
+    ".question-page-content__options p"
+  );
+  var optionValue = document.querySelectorAll(
+    ".question-page-content__options .option"
+  );
+  var correctAnswer = document.querySelector(".correctAnswer");
+  var submitButton = document.querySelector(".question-page-content__submit a");
+  var resultDetails = [];
+  var selectedOption = null;
+  // console.log(questionList);
 
-  // function questionRender(eachQuestion) {
-  //   if (currentQuestionNumber < questionList.length) {
-  //     questionsContainer.innerHTML = eachQuestion.question;
+  function questionRender(eachQuestion) {
+    if (currentQuestionNumber < ListOfquestion.length) {
+      questionsContainer.innerHTML = eachQuestion.question;
+      questionNumber.innerHTML = currentQuestionNumber + 1;
+      correctAnswer.value = eachQuestion.answer;
+      for (let i = 0; i <= 3; i++) {
+        optionContainer[i].innerHTML = eachQuestion[`option${i + 1}`];
+        optionValue[i].value = eachQuestion[`option${i + 1}`];
+        var value = eachQuestion[`option${i + 1}`];
+      }
+      var option = document.getElementsByName("option");
+      for (let i = 0; i < option.length; i++) {
+        option[i].checked = false;
+      }
+    } else {
+      console.log("hellohello");
+      sessionStorage.setItem("resultDetails", JSON.stringify(resultDetails));
+    }
 
-  //     questionNumber.innerHTML = currentQuestionNumber + 1;
-  //     correctAnswer.value = eachQuestion.answer;
-  //     for (let i = 0; i <= 3; i++) {
-  //       optionContainer[i].innerHTML = eachQuestion[`option${i + 1}`];
-  //       optionValue[i].value = eachQuestion[`option${i + 1}`];
-  //       var value = eachQuestion[`option${i + 1}`];
-  //     }
-  //     var option = document.getElementsByName("option");
-  //     for (let i = 0; i < option.length; i++) {
-  //       option[i].checked = false;
-  //     }
-  //   } else {
-  //     currentQuestionNumber = 0;
-  //     resultDetails = [];
-  //     submitButton.href = "{% url 'resultPage'%}";
-  //   }
-
-  //   if (currentQuestionNumber < questionList.length - 1) {
-  //     submitButton.innerHTML = "next";
-  //   } else if (currentQuestionNumber == questionList.length - 1) {
-  //     submitButton.innerHTML = "submit";
-  //   }
-  //   // document.getElementById("questionForm").reset();
-  // }
+    if (currentQuestionNumber < ListOfquestion.length - 1) {
+      submitButton.innerHTML = "next";
+    } else if (currentQuestionNumber == ListOfquestion.length - 1) {
+      submitButton.innerHTML = "submit";
+    }
+  }
 
   // // first rendering of question details list page
 
-  // questionRender(questionList[currentQuestionNumber]);
+  questionRender(ListOfquestion[currentQuestionNumber]);
 
-  // // on click next button
+  // on click next button
 
-  // submitButton.addEventListener("click", () => {
-  //   var question = document.getElementsByClassName(
-  //     "question-page-content__questions"
-  //   )[0].innerHTML;
+  submitButton.addEventListener("click", (event) => {
+    event.preventDefault();
 
-  //   var option = document.getElementsByName("option");
-  //   for (let i = 0; i < option.length; i++) {
-  //     if (option[i].checked) {
-  //       var selectedOption = option[i].value;
-  //     }
-  //   }
-  //   var correctAnswer =
-  //     document.getElementsByClassName("correctAnswer")[0].value;
+    if (currentQuestionNumber == ListOfquestion.length - 1) {
+      var stringFormResult = JSON.stringify(resultDetails);
+      location.pathname = "mcq/resultPage/";
+    }
 
-  //   // creating object for currect question ,selected option and answer
+    var question = document.getElementsByClassName(
+      "question-page-content__questions"
+    )[0].innerHTML;
 
-  //   currentQuestionDetails = {
-  //     question: question,
-  //     selectedOption: selectedOption,
-  //     correctAnswer: correctAnswer,
-  //   };
-  //   resultDetails.push(currentQuestionDetails);
-  //   console.log(resultDetails);
-  //   currentQuestionNumber++;
-  //   questionRender(questionList[currentQuestionNumber]);
-  // });
+    var option = document.getElementsByName("option");
+    for (let i = 0; i < option.length; i++) {
+      if (option[i].checked) {
+        selectedOption = option[i].value;
+      }
+    }
+    var correctAnswer =
+      document.getElementsByClassName("correctAnswer")[0].value;
+
+    // creating object for currect question ,selected option and answer
+
+    currentQuestionDetails = {
+      question: question,
+      selectedOption: selectedOption,
+      correctAnswer: correctAnswer,
+    };
+    resultDetails.push(currentQuestionDetails);
+    console.log(resultDetails);
+    currentQuestionNumber++;
+    questionRender(ListOfquestion[currentQuestionNumber]);
+  });
 </script>
 {% endblock %}

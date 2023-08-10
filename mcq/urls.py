@@ -12,7 +12,9 @@ urlpatterns = [path('', views.login, name='login'),
                     views.testContent, name='testContent'),
                path('testInstruction/<str:cont>/<str:languageName>', views.testInstruction,
                     name='testInstruction'),
-               path('questions/', views.questions, name='questionPage'),
-               path('resultPage', views.result, name='resultPage')
+               path('questions/<str:languageTopic>',
+                    views.questions, name='questionPage'),
+               path('resultPage/',
+                    views.result, name='resultPage')
 
                ]

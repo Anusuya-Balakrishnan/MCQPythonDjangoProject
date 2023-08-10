@@ -15,7 +15,9 @@
         <li>Each Questions carries 1 mark</li>
         <li>Time Alloted: {{time}} minutes</li>
       </ul>
-      <button><a href="{%url 'questionPage' %}">Start Test</a></button>
+      <button>
+        <a href="{%url 'questionPage' languageTopic=topic %}">Start Test</a>
+      </button>
     </div>
   </div>
   <div class="instruction-page_image">
@@ -24,12 +26,12 @@
 </div>
 
 <script>
-  console.log("Hello javascript");
-  sessionStorage.setItem("questionList", questionList);
-  // console.log(JSON.stringify(questionList));
+  // getting data from template and stored in variable questionListObject
+  var questionListObject = document.getElementById("questionList").outerText;
+  // storing received object as string sessionStorage
+  sessionStorage.setItem("questionList", JSON.stringify(questionListObject));
   const questionListString = JSON.parse(sessionStorage.getItem("questionList"));
-  console.log("string data", questionListString);
   const questionObject = JSON.parse(questionListString);
-  console.log(questionObject.question, "session ");
+  console.log(questionObject);
 </script>
 {% endblock %}

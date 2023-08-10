@@ -19,6 +19,9 @@
       <div class="resultPage__body_circle"></div>
     </div>
   </div>
-  <script></script>
+  <script>
+    const resultDetails = JSON.parse(sessionStorage.getItem("resultDetails"));
+    console.log(resultDetails);
+  </script>
 </section>
 {% endblock %}

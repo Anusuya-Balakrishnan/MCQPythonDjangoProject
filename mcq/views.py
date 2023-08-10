@@ -128,17 +128,15 @@ def testInstruction(req, cont, languageName):
                                                 "time": sumTime})
 
 
-def questions(req, questionNo=0):
+def questions(req, languageTopic, questionNo=0):
     if(req.session.get("user") == None):
         return redirect('login')
     questionList = req.session.get("questionList")
 
-    # count = len(questionList)
-    # databaseConnection.resultCollection.insert_one()
-
     return render(req, "questionPage.html", {"userName": userNameFunction(req.session["user"]),
-                                             "userProfile": 1, "questionList": req.session.get("questionList"),
-                                             "noOfQuestions": len(req.session.get("questionList"))})
+                                             "userProfile": 1, "topic": languageTopic, })
+    #  "questionList": req.session.get("questionList"),
+    #  "noOfQuestions": len(req.session.get("questionList"))
     # "questionList": questionList, 'noOfQuestions': len(questionList)
 
 
@@ -146,4 +144,5 @@ def result(req):
     if(req.session.get("user") == None):
         return redirect('login')
 
-    return render(req, "resultPage.html", {"userName": userNameFunction(req.session["user"]), "userProfile": 1, })
+    return render(req, "resultPage.html", {"userName": userNameFunction(req.session["user"]),
+                                           "userProfile": 1, })
