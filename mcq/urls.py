@@ -14,6 +14,8 @@ urlpatterns = [path('', views.login, name='login'),
                     name='testInstruction'),
                path('questions/<str:languageTopic>',
                     views.questions, name='questionPage'),
+               path('questionPart/<str:languageTopic>', views.questionsPagePart2,
+                    name='questionsPart'),
                path('resultPage/',
                     views.result, name='resultPage')
 

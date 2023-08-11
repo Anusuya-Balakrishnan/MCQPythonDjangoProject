@@ -112,14 +112,14 @@ questionList = []
 def testInstruction(req, cont, languageName):
     if(req.session.get("user") == None):
         return redirect('login')
-    print("content=", cont, "\n")
+    # print("content=", cont, "\n")
     questionList = databaseConnection.questionsList(cont, languageName)
     req.session["questionList"] = questionList
     sumTime = 0
     for eachQuestion in questionList:
         sumTime += int(eachQuestion["time"])
     print(sumTime)
-    print(questionList, "questionList")
+    # print(questionList, "questionList")
     return render(req, "testInstruction.html", {"userName": userNameFunction(req.session["user"]),
                                                 "userProfile": 1, "topic": cont.title(),
                                                 "questionList": questionList,
@@ -131,7 +131,6 @@ def testInstruction(req, cont, languageName):
 def questions(req, languageTopic, questionNo=0):
     if(req.session.get("user") == None):
         return redirect('login')
-    questionList = req.session.get("questionList")
 
     return render(req, "questionPage.html", {"userName": userNameFunction(req.session["user"]),
                                              "userProfile": 1, "topic": languageTopic, })
@@ -139,10 +138,98 @@ def questions(req, languageTopic, questionNo=0):
     #  "noOfQuestions": len(req.session.get("questionList"))
     # "questionList": questionList, 'noOfQuestions': len(questionList)
 
+# another way to get data from result data
+
+
+questionNo = 0
+
+
+def questionsPagePart2(req, languageTopic):
+
+    if(req.session.get("user") == None):
+        return redirect('login')
+    questionList = req.session.get("questionList")
+    noOfQuestions = len(questionList)
+    questions = {}
+    questionNoList = []
+    resultList = []
+
+    if(req.session.get("currentQuestionNo") == None):
+        req.session["currentQuestionNo"] = 0
+        currentQuestionNo = 0
+    else:
+        req.session["currentQuestionNo"] = str(
+            int(req.session.get("currentQuestionNo"))+1)
+        currentQuestionNo = int(req.session["currentQuestionNo"])
+
+    if(currentQuestionNo < noOfQuestions):
+
+        addResultData(req)
+        keys = questionList[currentQuestionNo].keys()
+        questionNoList.append(currentQuestionNo)
+        for key in keys:
+            questions[key] = questionList[currentQuestionNo].get(key)
+    else:
+        addResultData(req)
+        del req.session["currentQuestionNo"]
+        return redirect('resultPage')
+
+    resultValue = {"userName": userNameFunction(req.session["user"]),
+                   "userProfile": 1, "noOfQuestions": noOfQuestions,
+                   "currentQuestionNo": currentQuestionNo,
+                   "nextQuestionNo": currentQuestionNo+1,
+                   "currentQuestion": questions,
+                   "questionNoList": questionNoList[-1]+1,
+                   "topic": languageTopic
+                   }
+    print(resultList)
+    return render(req, "questionPagePart2.html", resultValue)
+
 
 def result(req):
     if(req.session.get("user") == None):
         return redirect('login')
-
+    if(req.session.get("resultData") != None):
+        resultData = req.session["resultData"]
+        correctCount = 0
+        wrongCount = 0
+        skippedCount = 0
+        totalQuestion = len(resultData)
+        print(resultData, "\nlength", len(resultData))
+        for eachQuestion in resultData:
+            if(eachQuestion["selectedOption"] == eachQuestion["correctAnswer"]):
+                correctCount += 1
+            elif(eachQuestion["selectedOption"] == None):
+                skippedCount += 1
+            elif(eachQuestion["selectedOption"] != eachQuestion["correctAnswer"]):
+                wrongCount += 1
+    print(correctCount)
+    percentage = int((correctCount/totalQuestion)*100)
+    del req.session["resultData"]
     return render(req, "resultPage.html", {"userName": userNameFunction(req.session["user"]),
-                                           "userProfile": 1, })
+                                           "userProfile": 1,
+                                           "percentage": percentage,
+                                           'correctCount': correctCount,
+                                           "skippedCount": skippedCount,
+                                           "wrongCount": wrongCount
+
+                                           })
+
+
+def addResultData(req):
+    questionDict = {}
+    if(req.method == "POST"):
+        questionName = req.POST.get("currentQuestion")
+        selectedOption = req.POST.get("option")
+        correctAnswer = req.POST.get("correctAnswer")
+        questionDict = {"questionName": questionName,
+                        "selectedOption": selectedOption, "correctAnswer": correctAnswer}
+        if(req.session.get("resultData") == None):
+            resultList = []
+            resultList.append(questionDict)
+            req.session["resultData"] = resultList
+        else:
+            resultList = req.session.get("resultData")
+            resultList.append(questionDict)
+            req.session["resultData"] = resultList
+        print(req.session["resultData"])

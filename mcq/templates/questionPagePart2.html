@@ -1,0 +1,148 @@
+{% extends 'base.html'%}
+<!-- load static -->
+{% load static %}
+<!-- block content -->
+{% block content %}
+<section class="question-page">
+  <div class="question-page__title">{{topic}}</div>
+  <div class="question-page__body">
+    <div class="question-page-content">
+      <!-- variable -->
+      <!-- {{ questionList|json_script:'name' }} -->
+      <!--  -->
+      {{ noOfQuestions|json_script:'noOfQuestions' }}
+      <!-- dictionary of current question, option and answer -->
+      {{ currentQuestion|json_script:'currentQuestion' }}
+
+      <!-- getting current question no -->
+
+      {{ currentQuestionNo|json_script:'currentQuestionNo' }}
+      <!--  getting next question no-->
+      {{ nextQuestionNo | json_script:'nextQuestionNo'}}
+
+      <!-- completed list count -->
+      {{questionNoList | json_script:'questionNoList'}}
+
+      <form method="POST" id="questionForm">
+        {% csrf_token %}
+
+        <span class="questionNumber">{{questionNoList}}</span>
+        <span class="question-page-content__questions"
+          >{{ currentQuestion.question }}</span
+        >
+        <input
+          type="hidden"
+          value="{{currentQuestion.question}}"
+          name="currentQuestion"
+        />
+        <input type="hidden" name="questionNo" value="{{nextQuestionNo}}" />
+        <div class="question-page-content__optionParent">
+          <div class="question-page-content__options">
+            <input
+              type="radio"
+              name="option"
+              class="option"
+              value="{{currentQuestion.option1}}"
+            />
+            <p>{{currentQuestion.option1}}</p>
+          </div>
+          <div class="question-page-content__options">
+            <input
+              type="radio"
+              name="option"
+              class="option"
+              value="{{currentQuestion.option2}}"
+            />
+            <p>{{currentQuestion.option2}}</p>
+          </div>
+
+          <div class="question-page-content__options">
+            <input
+              type="radio"
+              name="option"
+              class="option"
+              value="{{currentQuestion.option3}}"
+            />
+            <p>{{currentQuestion.option3}}</p>
+          </div>
+          <div class="question-page-content__options">
+            <input
+              type="radio"
+              name="option"
+              class="option"
+              value="{{currentQuestion.option4}}"
+            />
+            <p>{{currentQuestion.option4}}</p>
+          </div>
+        </div>
+        <input
+          type="hidden"
+          class="correctAnswer"
+          name="correctAnswer"
+          value="{{currentQuestion.answer}}"
+        />
+        <button
+          type="submit"
+          class="question-page-content__submit"
+          name="submit"
+        >
+          next
+        </button>
+      </form>
+    </div>
+    <div class="question-page__question-list">
+      <div class="question-page__each-question__time">
+        <p>Time</p>
+        <div class="exact-time">00 mins:58 sec</div>
+      </div>
+      <div class="question-page__each-questionNo-parent">
+        <p>Question Palatte:</p>
+        <div class="question-page__each-question__no">
+          <!-- questions button child list -->
+        </div>
+      </div>
+      <div class="question-page__instruction">
+        <div class="question-page__instruction1">
+          <button></button>
+          <p>Answered</p>
+        </div>
+        <div class="question-page__instruction2">
+          <button></button>
+          <p>Not Visited</p>
+        </div>
+        <div class="question-page__instruction3">
+          <button></button>
+          <p>Not Answered</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  const currentQuestionNo =
+    document.getElementById("currentQuestionNo").outerText;
+  const nextQuestionNo = document.getElementById("nextQuestionNo").outerText;
+  const noOfQuestions = document.getElementById("noOfQuestions").outerText;
+  const questionNoListLen =
+    document.getElementById("questionNoListLen").outerText;
+
+  const submitButton = document.querySelector(".question-page-content__submit");
+
+  //   submitButton.addEventListener("click", (event) => {
+  //     event.preventDefault();
+  //     location.pathname = `mcq/questionPart/${nextQuestionNo}`;
+  //   });
+  // started creating questions button (side option to select questions):
+  var question_page_Parent = document.querySelector(
+    ".question-page__each-question__no"
+  );
+  for (let i = 0; i < noOfQuestions; i++) {
+    var button = document.createElement("button");
+    button.classList = `button button-${i + 1}`;
+    button.innerHTML = i + 1;
+    question_page_Parent.appendChild(button);
+  }
+  // end creating questions button:
+</script>
+
+{% endblock %}

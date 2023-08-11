@@ -33,9 +33,9 @@ for data in questionsCollection.find():
 def questionsList(topic, language):
     questions = []
     eachQuestion = {}
-    print("topic", topic, "\nlanguage", language)
+    # print("topic", topic, "\nlanguage", language)
     for j in questionsCollection.find({'$and': [{"topic": topic}, {"language": language}]}):
-        print("jjjjjjjjjjjjjjjjjjjjjjjjj", j)
+        # print("jjjjjjjjjjjjjjjjjjjjjjjjj", j)
         eachQuestion = {}
         eachQuestion["question"] = j["questions"]
         eachQuestion['option1'] = j['option1']
