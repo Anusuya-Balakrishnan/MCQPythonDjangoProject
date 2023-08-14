@@ -49,7 +49,7 @@ def signup(req):
                    "mobileNumber": mobileNumber, "profileImage": profileImage}
         # inserting new user into database
         data = databaseConnection.userCollection.insert_one(newUser)
-        print("new user inserted", data.inserted_id)
+        # print("new user inserted", data.inserted_id)
         if(bool(data.inserted_id)):
             req.session["user"] = str(data.inserted_id)
             return redirect('home')
@@ -68,6 +68,8 @@ def home(req):
         "questionsType": databaseConnection.questionsTypeSet,
         "t": "ocean"
     }
+    if(req.session.get("QuizCompleted") != None):
+        del req.session["QuizCompleted"]
     return render(req, "home.html", data)
 
 
@@ -75,9 +77,11 @@ def home(req):
 def logout(req):
     # print("LOGOUT", req.session.get("user"), "\n\n")
     if(req.session.get("user") != None):
-        del req.session["user"]
-        return redirect('login')
-    return redirect('home')
+        for key in list(req.session.keys()):
+            print(req.session[key])
+            del req.session[key]
+
+    return redirect('login')
 
 
 def testList(req):
@@ -93,7 +97,7 @@ SelectedLanguage = ""
 def testContent(req, lang):
     languageKeys = databaseConnection.languageContent.keys()
     content = []
-    print("languageKeys", languageKeys)
+    # print("languageKeys", languageKeys)
     for key in languageKeys:
         if(lang == key and databaseConnection.languageContent[key] != ""):
             content = databaseConnection.languageContent[key]
@@ -102,6 +106,7 @@ def testContent(req, lang):
 
     if(req.session.get("user") == None):
         return redirect('login')
+    req.session["language"] = lang.title()
     return render(req, "testContent.html", {"userName": userNameFunction(req.session["user"]),
                                             "userProfile": 1, "language": lang.title(), "contentList": content})
 
@@ -110,16 +115,23 @@ questionList = []
 
 
 def testInstruction(req, cont, languageName):
+
     if(req.session.get("user") == None):
         return redirect('login')
-    # print("content=", cont, "\n")
+    req.session["topic"] = cont.title()
+    resultPersonId = databaseConnection.findPersonResultCollection(
+        req.session.get("user"), req.session["language"], req.session["topic"])
+    print("returenValue", resultPersonId)
+    if(resultPersonId):
+        return redirect('home')
     questionList = databaseConnection.questionsList(cont, languageName)
     req.session["questionList"] = questionList
     sumTime = 0
     for eachQuestion in questionList:
         sumTime += int(eachQuestion["time"])
-    print(sumTime)
+    # print(sumTime)
     # print(questionList, "questionList")
+
     return render(req, "testInstruction.html", {"userName": userNameFunction(req.session["user"]),
                                                 "userProfile": 1, "topic": cont.title(),
                                                 "questionList": questionList,
@@ -146,43 +158,45 @@ questionNo = 0
 
 def questionsPagePart2(req, languageTopic):
 
-    if(req.session.get("user") == None):
-        return redirect('login')
     questionList = req.session.get("questionList")
     noOfQuestions = len(questionList)
     questions = {}
     questionNoList = []
     resultList = []
+    if((req.session.get("QuizCompleted") == None)):
+        if(req.session.get("user") == None):
+            return redirect('login')
+        if(req.session.get("currentQuestionNo") == None):
+            req.session["currentQuestionNo"] = 0
+            currentQuestionNo = 0
+        else:
+            req.session["currentQuestionNo"] = str(
+                int(req.session.get("currentQuestionNo"))+1)
+            currentQuestionNo = int(req.session["currentQuestionNo"])
 
-    if(req.session.get("currentQuestionNo") == None):
-        req.session["currentQuestionNo"] = 0
-        currentQuestionNo = 0
+        if(currentQuestionNo < noOfQuestions):
+            addResultData(req)
+            keys = questionList[currentQuestionNo].keys()
+            questionNoList.append(currentQuestionNo)
+            for key in keys:
+                questions[key] = questionList[currentQuestionNo].get(key)
+        else:
+            addResultData(req)
+            del req.session["currentQuestionNo"]
+            return redirect('resultPage')
+
+        resultValue = {"userName": userNameFunction(req.session["user"]),
+                       "userProfile": 1, "noOfQuestions": noOfQuestions,
+                       'currentQuestionNo': currentQuestionNo,
+                       "nextQuestionNo": currentQuestionNo+1,
+                       "currentQuestion": questions,
+                       "questionNo": questionNoList[-1]+1,
+
+                       "topic": languageTopic
+                       }
     else:
-        req.session["currentQuestionNo"] = str(
-            int(req.session.get("currentQuestionNo"))+1)
-        currentQuestionNo = int(req.session["currentQuestionNo"])
+        return redirect("home")
 
-    if(currentQuestionNo < noOfQuestions):
-
-        addResultData(req)
-        keys = questionList[currentQuestionNo].keys()
-        questionNoList.append(currentQuestionNo)
-        for key in keys:
-            questions[key] = questionList[currentQuestionNo].get(key)
-    else:
-        addResultData(req)
-        del req.session["currentQuestionNo"]
-        return redirect('resultPage')
-
-    resultValue = {"userName": userNameFunction(req.session["user"]),
-                   "userProfile": 1, "noOfQuestions": noOfQuestions,
-                   "currentQuestionNo": currentQuestionNo,
-                   "nextQuestionNo": currentQuestionNo+1,
-                   "currentQuestion": questions,
-                   "questionNoList": questionNoList[-1]+1,
-                   "topic": languageTopic
-                   }
-    print(resultList)
     return render(req, "questionPagePart2.html", resultValue)
 
 
@@ -190,12 +204,13 @@ def result(req):
     if(req.session.get("user") == None):
         return redirect('login')
     if(req.session.get("resultData") != None):
+        req.session["QuizCompleted"] = True
         resultData = req.session["resultData"]
         correctCount = 0
         wrongCount = 0
         skippedCount = 0
         totalQuestion = len(resultData)
-        print(resultData, "\nlength", len(resultData))
+        # print(resultData, "\nlength", len(resultData))
         for eachQuestion in resultData:
             if(eachQuestion["selectedOption"] == eachQuestion["correctAnswer"]):
                 correctCount += 1
@@ -203,8 +218,13 @@ def result(req):
                 skippedCount += 1
             elif(eachQuestion["selectedOption"] != eachQuestion["correctAnswer"]):
                 wrongCount += 1
-    print(correctCount)
-    percentage = int((correctCount/totalQuestion)*100)
+        percentage = int((correctCount/totalQuestion)*100)
+        databaseConnection.insertResultData(req.session.get(
+            "user"), resultData, req.session["topic"], req.session["language"], percentage)
+    else:
+        return redirect('home')
+    # print(correctCount)
+
     del req.session["resultData"]
     return render(req, "resultPage.html", {"userName": userNameFunction(req.session["user"]),
                                            "userProfile": 1,
@@ -232,4 +252,4 @@ def addResultData(req):
             resultList = req.session.get("resultData")
             resultList.append(questionDict)
             req.session["resultData"] = resultList
-        print(req.session["resultData"])
+        # print(req.session["resultData"])

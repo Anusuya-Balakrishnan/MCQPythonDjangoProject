@@ -332,3 +332,21 @@ pythonQuestions = [{"questions": "Which of these in not a core data type?",
 # operators
 # if else
 # questionsCollection.insert_many(pythonQuestions)
+
+# insert into result Collection
+
+# databaseConnection.insertResultData(req.session.get(
+# "user"), resultData, req.session["topic"], req.session["language"])
+
+
+def insertResultData(username, resultData, topic, language, percentage):
+    data = {"username": username, "topic": topic,
+            "language": language, "resultData": resultData, "mark": percentage}
+    resultCollection.insert_one(data)
+
+
+def findPersonResultCollection(userId, language, topic):
+    data = resultCollection.find(
+        {"username": userId, "language": language, "topic": topic})
+    print("data", data)
+    return data

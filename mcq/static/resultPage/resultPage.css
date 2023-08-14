@@ -57,7 +57,6 @@
   height: 250px;
   border-radius: 50%;
   background-color: #2D81F7;
-  background: conic-gradient(#2D81F7 20deg, rgb(126, 126, 126) 80deg);
   position: relative;
   display: flex;
   align-items: center;

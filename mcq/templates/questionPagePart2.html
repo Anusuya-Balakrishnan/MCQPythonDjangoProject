@@ -20,13 +20,14 @@
       <!--  getting next question no-->
       {{ nextQuestionNo | json_script:'nextQuestionNo'}}
 
-      <!-- completed list count -->
-      {{questionNoList | json_script:'questionNoList'}}
+      <!-- question no -->
+      {{questionNo | json_script:'questionNo'}}
+      <!-- question list -->
 
       <form method="POST" id="questionForm">
         {% csrf_token %}
 
-        <span class="questionNumber">{{questionNoList}}</span>
+        <span class="questionNumber">{{questionNo}}</span>
         <span class="question-page-content__questions"
           >{{ currentQuestion.question }}</span
         >
@@ -112,20 +113,19 @@
         </div>
         <div class="question-page__instruction3">
           <button></button>
-          <p>Not Answered</p>
+          <p>Current Question</p>
+          <!-- <p>Not Answered</p> -->
         </div>
       </div>
     </div>
   </div>
 </section>
 <script>
-  const currentQuestionNo =
-    document.getElementById("currentQuestionNo").outerText;
   const nextQuestionNo = document.getElementById("nextQuestionNo").outerText;
   const noOfQuestions = document.getElementById("noOfQuestions").outerText;
-  const questionNoListLen =
-    document.getElementById("questionNoListLen").outerText;
 
+  const currentQuestionNo =
+    document.getElementById("currentQuestionNo").outerText;
   const submitButton = document.querySelector(".question-page-content__submit");
 
   //   submitButton.addEventListener("click", (event) => {
@@ -140,7 +140,17 @@
     var button = document.createElement("button");
     button.classList = `button button-${i + 1}`;
     button.innerHTML = i + 1;
+
     question_page_Parent.appendChild(button);
+    if (currentQuestionNo == i) {
+      document.getElementsByClassName(
+        `button-${i + 1}`
+      )[0].style.backgroundColor = "#2D81F7";
+    } else if (i < currentQuestionNo) {
+      document.getElementsByClassName(
+        `button-${i + 1}`
+      )[0].style.backgroundColor = "#4ACD08";
+    }
   }
   // end creating questions button:
 </script>
