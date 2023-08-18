@@ -98,7 +98,8 @@
                 }
                 .question-page__instruction3{
                     button{
-                        background-color:$notAnsweredButton;
+                        background-color: #2D81F7;
+                        // background-color:$notAnsweredButton;
                     }
                     @extend .question-page__instruction1
                 }

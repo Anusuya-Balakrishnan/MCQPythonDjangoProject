@@ -78,7 +78,7 @@ def logout(req):
     # print("LOGOUT", req.session.get("user"), "\n\n")
     if(req.session.get("user") != None):
         for key in list(req.session.keys()):
-            print(req.session[key])
+            # print(req.session[key])
             del req.session[key]
 
     return redirect('login')
@@ -121,9 +121,9 @@ def testInstruction(req, cont, languageName):
     req.session["topic"] = cont.title()
     resultPersonId = databaseConnection.findPersonResultCollection(
         req.session.get("user"), req.session["language"], req.session["topic"])
-    print("returenValue", resultPersonId)
-    if(resultPersonId):
-        return redirect('home')
+    # print("returenValue", resultPersonId)
+    # if(resultPersonId):
+    #     return redirect('home')
     questionList = databaseConnection.questionsList(cont, languageName)
     req.session["questionList"] = questionList
     sumTime = 0
@@ -198,6 +198,11 @@ def questionsPagePart2(req, languageTopic):
         return redirect("home")
 
     return render(req, "questionPagePart2.html", resultValue)
+
+
+def demo(req):
+    return render(req, "resultPage.html", {"userName": userNameFunction(req.session["user"]),
+                                           "userProfile": 1, })
 
 
 def result(req):

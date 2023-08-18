@@ -342,11 +342,28 @@ pythonQuestions = [{"questions": "Which of these in not a core data type?",
 def insertResultData(username, resultData, topic, language, percentage):
     data = {"username": username, "topic": topic,
             "language": language, "resultData": resultData, "mark": percentage}
-    resultCollection.insert_one(data)
+    result = resultCollection.find({"username": username})
+    # in this part , checking a person already completed any quiz or not
+    # if he attended means we only update the previous record and not creating new record for him
+    if(result == None):
+        resultCollection.insert_one(data)
+    else:
+        for person in result:
+
+            if(person["username"] == username and person["language"] == language and person["topic"] == topic):
+                id = person["_id"]
+
+                olddata = {"_id": id}
+                newData = {
+                    "$set": {"resultData": resultData, "mark": percentage}}
+                resultCollection.update_one(olddata, newData)
+                return
+        else:
+            resultCollection.insert_one(data)
 
 
 def findPersonResultCollection(userId, language, topic):
     data = resultCollection.find(
         {"username": userId, "language": language, "topic": topic})
-    print("data", data)
+    # print("data", data)
     return data
