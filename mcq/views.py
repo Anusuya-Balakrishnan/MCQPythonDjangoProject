@@ -18,10 +18,10 @@ def userNameFunction(id):
 def login(req):
     if(req.session.get("user") == None):
         if req.method == "POST":
-            mobileNumber = req.POST.get("mobilenumber")
+            emailId = req.POST.get("emailId")
             isNewUser = False
             for eachPerson in databaseConnection.userCollection.find():
-                if(eachPerson["mobileNumber"] == mobileNumber):
+                if(eachPerson["emailId"] == emailId):
                     req.session["user"] = str(eachPerson["_id"])
                     return redirect('home')
                 else:
@@ -33,7 +33,7 @@ def login(req):
     else:
         return redirect('home')
 
-    return render(req, "login.html", {"userProfile": 0})
+    return render(req, "login.html", {"userProfile": 0, "exit":False})
 
 
 # sign up page
@@ -53,7 +53,7 @@ def signup(req):
         if(bool(data.inserted_id)):
             req.session["user"] = str(data.inserted_id)
             return redirect('home')
-    return render(req, "signup.html",  {"userProfile": 0})
+    return render(req, "signup.html",  {"userProfile": 0,"exit":False},)
 
 # home page
 
@@ -66,7 +66,7 @@ def home(req):
         "userName": userNameFunction(req.session["user"]),
         "userProfile": 1,
         "questionsType": databaseConnection.questionsTypeSet,
-        "t": "ocean"
+        "t": "ocean","exit":False
     }
     if(req.session.get("QuizCompleted") != None):
         del req.session["QuizCompleted"]
@@ -93,6 +93,7 @@ def testList(req):
 
 SelectedLanguage = ""
 
+#  MCQ'S Test content -->> datatypes, variables, basic of python
 
 def testContent(req, lang):
     languageKeys = databaseConnection.languageContent.keys()
@@ -106,9 +107,36 @@ def testContent(req, lang):
 
     if(req.session.get("user") == None):
         return redirect('login')
+    
+
+    # get topic details of student already attended test
+    current__user=req.session.get("user")
+    findPerson__resultCollection=list(databaseConnection.resultCollection.find({"username":current__user}))
+    
+    # languageList contains list of language already attended 
+    languageList=[]
+    for eachResult in findPerson__resultCollection:
+        languageList.append(eachResult.get("language"))
+    
+    languageList=list(set(languageList))
+    print(languageList)
+    # dictionary contains details about language and topics
+    personAttendedTopic={}
+    
+    for eachLanguage in languageList:
+        topics=[]
+        for eachResult in findPerson__resultCollection:
+            if(eachLanguage==eachResult.get("language")):
+                topics.append(eachResult.get("topic"))
+            
+        personAttendedTopic[eachLanguage]=topics
+    
+
+    print("personAttendedTopic",personAttendedTopic.get(lang))
     req.session["language"] = lang.title()
     return render(req, "testContent.html", {"userName": userNameFunction(req.session["user"]),
-                                            "userProfile": 1, "language": lang.title(), "contentList": content})
+                                            "userProfile": 1, "language": lang.title(),"exit":False, 
+                                            "contentList": content,"attendedTopic":personAttendedTopic.get(lang)})
 
 
 questionList = []
@@ -124,7 +152,10 @@ def testInstruction(req, cont, languageName):
     # print("returenValue", resultPersonId)
     # if(resultPersonId):
     #     return redirect('home')
+
+    # function return list of questions based on language and topic
     questionList = databaseConnection.questionsList(cont, languageName)
+    
     req.session["questionList"] = questionList
     sumTime = 0
     for eachQuestion in questionList:
@@ -137,7 +168,7 @@ def testInstruction(req, cont, languageName):
                                                 "questionList": questionList,
                                                 # "currentQuestion": questionList[0],
                                                 "noQuestions": len(questionList),
-                                                "time": sumTime})
+                                                "time": sumTime,"exit":False})
 
 
 def questions(req, languageTopic, questionNo=0):
@@ -145,7 +176,7 @@ def questions(req, languageTopic, questionNo=0):
         return redirect('login')
 
     return render(req, "questionPage.html", {"userName": userNameFunction(req.session["user"]),
-                                             "userProfile": 1, "topic": languageTopic, })
+                                             "userProfile": 1, "topic": languageTopic,"exit":True })
     #  "questionList": req.session.get("questionList"),
     #  "noOfQuestions": len(req.session.get("questionList"))
     # "questionList": questionList, 'noOfQuestions': len(questionList)
@@ -202,7 +233,7 @@ def questionsPagePart2(req, languageTopic):
 
 def demo(req):
     return render(req, "resultPage.html", {"userName": userNameFunction(req.session["user"]),
-                                           "userProfile": 1, })
+                                           "userProfile": 1 })
 
 
 def result(req):

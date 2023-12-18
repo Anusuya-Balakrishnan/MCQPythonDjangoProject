@@ -16,7 +16,7 @@
         <!--  -->
         <!-- {{ currentQuestion|json_script:'currentQuestion' }} -->
 
-        <span class="questionNumber">{{ currentQuestion }}</span>
+        <span class="questionNumber">{{ currentQuestion }}. </span>
         <span class="question-page-content__questions"
           >{{ currentQuestion.question }}</span
         >
@@ -163,6 +163,8 @@
     if (currentQuestionNumber < ListOfquestion.length - 1) {
       submitButton.innerHTML = "next";
     } else if (currentQuestionNumber == ListOfquestion.length - 1) {
+      submitButton.href = "{% url 'demo' %}";
+      console.log(submitButton.href);
       submitButton.innerHTML = "submit";
     }
   }
@@ -178,7 +180,7 @@
 
     if (currentQuestionNumber == ListOfquestion.length - 1) {
       var stringFormResult = JSON.stringify(resultDetails);
-      location.pathname = "mcq/resultPage/";
+      // location.pathname = "mcq/resultPage/";
     }
 
     var question = document.getElementsByClassName(

@@ -30,6 +30,8 @@ for data in questionsCollection.find():
         languageContent[i] = set(content)
 
 
+# function return list of questions based on language and topic
+
 def questionsList(topic, language):
     questions = []
     eachQuestion = {}

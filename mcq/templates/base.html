@@ -41,12 +41,18 @@
               </div>
             </div>
             <div class="MCQ-userProfile__options">
+              {% if exit == False %}
               <div class="editOption">
                 <a href="{% url 'signup'%}"> Edit Profile </a>
               </div>
               <div class="logoutOption">
                 <a href="{% url 'logout' %}">Logout</a>
               </div>
+              {% else %}
+              <div class="logoutOption">
+                <a href="{% url 'resultPage' %}">Exit Test</a>
+              </div>
+              {% endif %}
             </div>
             <div class="MCQ-userProfile__leaderBoard">
               <a href="">Leader Board</a>
