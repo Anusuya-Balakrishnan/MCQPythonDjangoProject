@@ -1,6 +1,8 @@
 from django.shortcuts import render, HttpResponse, redirect
 from . import databaseConnection
 from bson.objectid import ObjectId
+from django.http import JsonResponse
+import json
 
 # user name function
 
@@ -235,6 +237,20 @@ def demo(req):
     return render(req, "resultPage.html", {"userName": userNameFunction(req.session["user"]),
                                            "userProfile": 1 })
 
+def resultLogic(req):
+    if req.method == 'POST' and req.is_ajax():
+        print("HEllo")
+        data_from_ajax = json.loads(req.body.decode('utf-8'))
+        
+        # Process the data (e.g., save to the database)
+        # You can access the list: data_from_ajax['values']
+
+        value= JsonResponse({'message': 'Data processed successfully'})
+        print("result_____________________",data_from_ajax)
+
+    # return JsonResponse({'message': 'Invalid request'}, status=400)
+    return render(req,"resultPage.html", {"userName": userNameFunction(req.session["user"]),
+                                           "userProfile": 1  ,"exit":False})
 
 def result(req):
     if(req.session.get("user") == None):

@@ -17,7 +17,7 @@ urlpatterns = [path('', views.login, name='login'),
                path('questionPart/<str:languageTopic>', views.questionsPagePart2,
                     name='questionsPart'),
                path('resultPage/',
-                    views.result, name='resultPage'),
+                    views.resultLogic, name='resultPage'),
                path('demo/', views.demo, name="demo"),
                # path('image',)
 

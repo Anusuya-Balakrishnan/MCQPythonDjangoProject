@@ -7,7 +7,7 @@
   <div class="question-page__title">{{topic}}</div>
   <div class="question-page__body">
     <div class="question-page-content">
-      <form method="POST" id="questionForm">
+      <form method="GET" id="questionForm">
         {% csrf_token %}
         <!-- variable -->
         <!-- {{ questionList|json_script:'name' }} -->
@@ -16,7 +16,7 @@
         <!--  -->
         <!-- {{ currentQuestion|json_script:'currentQuestion' }} -->
 
-        <span class="questionNumber">{{ currentQuestion }}. </span>
+        <span class="questionNumber">{{ currentQuestion }} </span>
         <span class="question-page-content__questions"
           >{{ currentQuestion.question }}</span
         >
@@ -69,6 +69,7 @@
           class="question-page-content__submit"
           name="submit"
         >
+          <input type="hidden" class="resultElement" />
           <a href=""> next </a>
         </button>
       </form>
@@ -116,10 +117,10 @@
   var question_page_Parent = document.querySelector(
     ".question-page__each-question__no"
   );
-  for (let i = 0; i < noOfQuestions; i++) {
+  for (let i = 1; i <= noOfQuestions; i++) {
     var button = document.createElement("button");
-    button.classList = `button button-${i + 1}`;
-    button.innerHTML = i + 1;
+    button.classList = `button button-${i}`;
+    button.innerHTML = i;
     question_page_Parent.appendChild(button);
   }
   // end creating questions button:
@@ -144,7 +145,7 @@
   function questionRender(eachQuestion) {
     if (currentQuestionNumber < ListOfquestion.length) {
       questionsContainer.innerHTML = eachQuestion.question;
-      questionNumber.innerHTML = currentQuestionNumber + 1;
+      questionNumber.innerHTML = currentQuestionNumber + 1 + ".";
       correctAnswer.value = eachQuestion.answer;
       for (let i = 0; i <= 3; i++) {
         optionContainer[i].innerHTML = eachQuestion[`option${i + 1}`];
@@ -163,8 +164,6 @@
     if (currentQuestionNumber < ListOfquestion.length - 1) {
       submitButton.innerHTML = "next";
     } else if (currentQuestionNumber == ListOfquestion.length - 1) {
-      submitButton.href = "{% url 'demo' %}";
-      console.log(submitButton.href);
       submitButton.innerHTML = "submit";
     }
   }
@@ -180,33 +179,69 @@
 
     if (currentQuestionNumber == ListOfquestion.length - 1) {
       var stringFormResult = JSON.stringify(resultDetails);
+      document.getElementById("questionForm").method = "POST";
+      document.querySelector("resultElement").value = stringFormResult;
+
+      // sending data to views file
+
+      // async () => {
+      //   const listData = JSON.parse(stringFormResult.value);
+
+      //   try {
+      //     const response = await fetch("{% url 'resultPage' %}", {
+      //       method: "POST",
+      //       headers: {
+      //         "Content-Type": "application/json",
+      //         "X-CSRFToken": "{{ csrf_token }}", // Include CSRF token if needed
+      //       },
+      //       body: JSON.stringify({ values: listData }),
+      //     });
+
+      //     if (response.ok) {
+      //       const responseData = await response.json();
+      //       console.log(responseData.message);
+      //       // Handle success, if needed
+      //     } else {
+      //       console.error("Error:", response.status, response.statusText);
+      //       // Handle error, if needed
+      //     }
+      //   } catch (error) {
+      //     console.error("Fetch error:", error);
+      //     // Handle error, if needed
+      //   }
+      // };
+
+      // demo process completed
+
+      window.location.href = "{% url 'resultPage' %}";
+      // submitButton.href = "{% url 'demo' %}";
       // location.pathname = "mcq/resultPage/";
-    }
+    } else {
+      var question = document.getElementsByClassName(
+        "question-page-content__questions"
+      )[0].innerHTML;
 
-    var question = document.getElementsByClassName(
-      "question-page-content__questions"
-    )[0].innerHTML;
-
-    var option = document.getElementsByName("option");
-    for (let i = 0; i < option.length; i++) {
-      if (option[i].checked) {
-        selectedOption = option[i].value;
+      var option = document.getElementsByName("option");
+      for (let i = 0; i < option.length; i++) {
+        if (option[i].checked) {
+          selectedOption = option[i].value;
+        }
       }
+      var correctAnswer =
+        document.getElementsByClassName("correctAnswer")[0].value;
+
+      // creating object for currect question ,selected option and answer
+
+      currentQuestionDetails = {
+        question: question,
+        selectedOption: selectedOption,
+        correctAnswer: correctAnswer,
+      };
+      resultDetails.push(currentQuestionDetails);
+      console.log(resultDetails);
+      currentQuestionNumber++;
+      questionRender(ListOfquestion[currentQuestionNumber]);
     }
-    var correctAnswer =
-      document.getElementsByClassName("correctAnswer")[0].value;
-
-    // creating object for currect question ,selected option and answer
-
-    currentQuestionDetails = {
-      question: question,
-      selectedOption: selectedOption,
-      correctAnswer: correctAnswer,
-    };
-    resultDetails.push(currentQuestionDetails);
-    console.log(resultDetails);
-    currentQuestionNumber++;
-    questionRender(ListOfquestion[currentQuestionNumber]);
   });
 </script>
 {% endblock %}
