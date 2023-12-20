@@ -3,6 +3,7 @@ from . import databaseConnection
 from bson.objectid import ObjectId
 from django.http import JsonResponse
 import json
+from django.views.decorators.csrf import csrf_exempt
 
 # user name function
 
@@ -236,21 +237,51 @@ def questionsPagePart2(req, languageTopic):
 def demo(req):
     return render(req, "resultPage.html", {"userName": userNameFunction(req.session["user"]),
                                            "userProfile": 1 })
-
-def resultLogic(req):
-    if req.method == 'POST' and req.is_ajax():
-        print("HEllo")
-        data_from_ajax = json.loads(req.body.decode('utf-8'))
+@csrf_exempt
+def resultLogic(request):
+    correctCount = 0
+    wrongCount = 0
+    skippedCount = 0
+    totalQuestion=0
+    percentage=0
+    resultList=[]
+    if(request.session.get("user") != None):
         
-        # Process the data (e.g., save to the database)
-        # You can access the list: data_from_ajax['values']
-
-        value= JsonResponse({'message': 'Data processed successfully'})
-        print("result_____________________",data_from_ajax)
-
-    # return JsonResponse({'message': 'Invalid request'}, status=400)
-    return render(req,"resultPage.html", {"userName": userNameFunction(req.session["user"]),
-                                           "userProfile": 1  ,"exit":False})
+        if request.method == 'POST':
+            try:
+                # Parse the JSON data sent from the template
+                data_received = json.loads(request.body)
+                resultList = list(data_received.get('data', []))
+                request.session["resultData"]=list(resultList)
+                # print("resultList",resultList)
+                
+                # Return a JsonResponse as a confirmation
+                return JsonResponse({'message': 'Data received successfully'})
+            except json.JSONDecodeError as e:
+                return JsonResponse({'error': 'Invalid JSON format'}, status=400)
+        if request.session.get("resultData")!= None:
+            print("Hello asdflkkkkkkkkkkkkkkkkkkk;",request.session["resultData"])
+            totalQuestion = len(request.session["resultData"])
+            for eachQuestion in request.session["resultData"]:
+                if(eachQuestion["selectedOption"] == eachQuestion["correctAnswer"]):
+                    correctCount += 1
+                elif(eachQuestion["selectedOption"] == None):
+                    skippedCount += 1
+                elif(eachQuestion["selectedOption"] != eachQuestion["correctAnswer"]):
+                    wrongCount += 1
+            if(totalQuestion!=0):
+                percentage = int((correctCount/totalQuestion)*100)
+            databaseConnection.insertResultData(request.session.get(
+            "user"), resultList, request.session["topic"], request.session["language"], percentage)
+        
+        del request.session["resultData"]
+        return render(request,"resultPage.html", {"userName": userNameFunction(request.session["user"]),"userProfile": 1 ,
+                                            "percentage": percentage,
+                                           'correctCount': correctCount,
+                                           "skippedCount": skippedCount,
+                                           "wrongCount": wrongCount ,"exit":False})
+    
+    return redirect("home")           
 
 def result(req):
     if(req.session.get("user") == None):

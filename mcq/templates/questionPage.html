@@ -179,37 +179,27 @@
 
     if (currentQuestionNumber == ListOfquestion.length - 1) {
       var stringFormResult = JSON.stringify(resultDetails);
-      document.getElementById("questionForm").method = "POST";
-      document.querySelector("resultElement").value = stringFormResult;
 
       // sending data to views file
 
-      // async () => {
-      //   const listData = JSON.parse(stringFormResult.value);
+      // Sample array of objects
 
-      //   try {
-      //     const response = await fetch("{% url 'resultPage' %}", {
-      //       method: "POST",
-      //       headers: {
-      //         "Content-Type": "application/json",
-      //         "X-CSRFToken": "{{ csrf_token }}", // Include CSRF token if needed
-      //       },
-      //       body: JSON.stringify({ values: listData }),
-      //     });
-
-      //     if (response.ok) {
-      //       const responseData = await response.json();
-      //       console.log(responseData.message);
-      //       // Handle success, if needed
-      //     } else {
-      //       console.error("Error:", response.status, response.statusText);
-      //       // Handle error, if needed
-      //     }
-      //   } catch (error) {
-      //     console.error("Fetch error:", error);
-      //     // Handle error, if needed
-      //   }
-      // };
+      // Use the Fetch API to send the data to the Django view
+      fetch('{% url "resultPage" %}', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ data: resultDetails }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+          // Handle the response if needed
+        })
+        .catch((error) => {
+          console.error(error);
+        });
 
       // demo process completed
 
